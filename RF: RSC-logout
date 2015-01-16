@@ -1,0 +1,15 @@
+*** Settings ***
+Documentation     A resource file with reusable keywords and variables for login/logout
+...
+...               The system specific keywords created here form our own
+...               domain specific language. They utilize keywords provided
+...               by the imported Selenium2Library.
+Library           Selenium2Library
+
+*** Variables ***
+${PROFILE}         xpath=/html/body/div/div/div[1]/ul/li[3]/a
+${LOGOUT}          xpath=/html/body/div/div/div[1]/ul/li[3]/ul/li[2]/a
+*** Keywords ***
+Logout
+    Click Link    ${PROFILE}
+    Click Link    ${LOGOUT}
