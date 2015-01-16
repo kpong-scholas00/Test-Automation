@@ -1,0 +1,58 @@
+*** Settings ***
+Documentation     A resource file with reusable keywords and variables for login/logout
+...
+...               The system specific keywords created here form our own
+...               domain specific language. They utilize keywords provided
+...               by the imported Selenium2Library.
+Library           Selenium2Library
+
+*** Variables ***
+${ANSWERBUTTON}     xpath=/html/body/div[1]/div/form/div[2]/fieldset[3]/div[2]/a
+${ANWERFRAME}       xpath=/html/body/div/div/form/div[2]/fieldset[3]/div[2]/div[2]/div[1]/div[2]/div[1]/div/div/iframe
+${ANSWERTEXT}       xpath=/html/body
+${CORRECT}          xpath=/html/body/div/div/form/div[2]/fieldset[3]/div[2]/div[2]/div[1]/div[3]/input
+${ADDANSWER}        xpath=/html/body/div[1]/div/form/div[2]/fieldset[3]/div[2]/a
+${ANSWERFRAME2}     xpath=/html/body/div/div/form/div[2]/fieldset[3]/div[2]/div[2]/div[2]/div[2]/div[1]/div/div/iframe                          
+${ANSWERTEXT2}      xpath=/html/body
+${SAVERETURN}       xpath=/html/body/div[1]/div/form/div[2]/div[7]/a[2]
+    
+
+
+*** Keywords ***
+Wait1
+    Wait Until Page Contains Element   ${ANSWERBUTTON} 
+	
+Add Answer
+    Click Link    ${ANSWERBUTTON} 
+    
+Select Answer Frame
+    Select Frame    ${ANWERFRAME}
+	
+	
+Enter Answer1 Text
+    Input Text      ${ANSWERTEXT}      QACRRCTANSWER
+
+Exit Frame
+	Unselect Frame	
+	
+Wait2
+    Wait Until Page Contains Element   ${CORRECT}
+	
+Correct Marker
+    Click Button    ${CORRECT} 
+	
+Add another Answer
+    Click Link    ${ADDANSWER}
+
+Select Answer Frame 2	
+    Select Frame    ${ANSWERFRAME2}
+	
+Enter Answer2 Text
+    Input Text      ${ANSWERTEXT2}      QAWRNGANSWER
+
+Exit Frame 2
+	Unselect Frame	
+	
+Save and Return
+    Click Link    ${SAVERETURN}
+	
