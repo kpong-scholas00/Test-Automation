@@ -1,0 +1,103 @@
+*** Settings ***
+Documentation     A resource file with reusable keywords and variables for login/logout
+...
+...               The system specific keywords created here form our own
+...               domain specific language. They utilize keywords provided
+...               by the imported Selenium2Library.
+Library           Selenium2Library
+
+*** Variables ***
+${PRODUCT}        xpath=/html/body/div/div/div[1]/ul/li[2]/a
+${E3D}            xpath=/html/body/div/div/table/tbody/tr[3]/td[1]/a
+${ASSETTAB}       xpath=/html/body/div/div/div[3]/section[1]/div/div[1]/a
+${BROWSE}         xpath=/html/body/div/div/form/fieldset/div[1]/div[2]/div/input
+${FILE}           C:\\Documents and Settings\\kaipon-QA\\Desktop\\1est.jpeg
+${REMOVE}         xpath=/html/body/div/div/form/fieldset/div[1]/div[2]/input
+${NAMEFIELD}      assessment_name
+${CHECKLIST}      xpath=/html/body/div/div/form/fieldset/fieldset/div[1]/div/select
+${CHECKLIST1}     xpath=/html/body/div/div/form/fieldset/fieldset/div[2]/div/select
+${CREATE}         xpath=/html/body/div/div/form/fieldset/div[2]/div/div/input
+${SAVE}           xpath=/html/body/div/div/form/fieldset/div[2]/div/div/input
+${QBUTTON}        xpath=/html/body/div/div/form/div[2]/div[2]/a
+${QFRAME}         xpath=/html/body/div/div/form/div[2]/fieldset[1]/div[2]/div/div/div/div/div/iframe
+${QLINE}          xpath=/html/body
+${QTYPE}          xpath=/html/body/div/div/form/div[2]/fieldset[1]/div[3]/div[1]/div/select
+${QSTRAND}        xpath=/html/body/div/div/form/div[2]/fieldset[1]/div[3]/div[2]/div/select
+${QSTATUS}        xpath=/html/body/div/div/form/div[2]/fieldset[1]/div[3]/div[3]/select
+${SKILL1}         xpath=/html/body/div/div/form/div[2]/div[1]/fieldset/div/div[1]/a
+${SKILL1SEL}      xpath=/html/body/div[3]/div[3]/div[1]/label/input
+${CLOSE}          xpath=/html/body/div[3]/div[2]/a
+
+*** Keywords ***
+Open Product Page
+    Click Link    ${PRODUCT}
+
+Open E3D Product Link
+    Click Link    ${E3D}
+
+Open AssetTab 
+    Click Link    ${ASSETTAB}
+
+Send File
+    Choose File    ${BROWSE}    ${FILE} 
+
+Test Name
+    Input Text    ${NAMEFIELD}     QAASSET
+
+Remove Preview
+    Click Button  ${REMOVE} 
+    
+Issue Dropdown
+    Select From List    ${CHECKLIST}     JRA
+
+Number Dropdown
+    Select From List    ${CHECKLIST1}    1
+
+Create Test
+    Click Button         ${CREATE}
+
+Save Test
+    Click Button         ${SAVE}
+	
+Create Question
+    Click Link         ${QBUTTON} 	
+	
+Wait1
+    Wait Until Page Contains Element   ${QFRAME}
+	
+Frame Select 
+    Select Frame    ${QFRAME}      
+
+Enter Text 
+    Input Text     ${QLINE}     QAASSETTEXT	
+	
+Exit Frame
+	Unselect Frame
+	
+Wait2
+    Wait Until Page Contains Element   ${QTYPE}
+	
+Question Type Dropdown
+    Select From List    ${QTYPE}     Selected Response, Single Answer
+	
+Question Strand Dropdown
+    Select From List     ${QSTRAND}  E3D3
+
+Question Status Dropdown
+    Select From List      ${QSTATUS}  Incomplete
+	
+Skill1	
+    Click Link       ${SKILL1}
+	
+Wait3
+    Wait Until Page Contains Element    ${SKILL1SEL}
+	
+Select Skill
+    Click Button       ${SKILL1SEL} 
+	
+Close Skill 
+    Click Link       ${CLOSE}
+	
+	
+	
+	
