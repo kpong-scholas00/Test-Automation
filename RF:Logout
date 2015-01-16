@@ -1,0 +1,11 @@
+*** Settings ***
+Documentation     Test Suite for login 
+...
+Resource          rsc-logout.txt
+
+*** Test Cases ***
+5-ValidLogout
+     Logout
+*** [Teardown]    Close Browser ***
+
+
