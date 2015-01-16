@@ -1,0 +1,153 @@
+# -*- coding: utf-8 -*-
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import Select
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoAlertPresentException
+import unittest, time, re
+
+class Login(unittest.TestCase):
+    def setUp(self):
+        self.driver = webdriver.Firefox()
+        self.driver.implicitly_wait(30)
+        self.base_url = "http://172.17.28.206/"
+        self.verificationErrors = []
+        self.accept_next_alert = True
+    
+    def test_login(self):
+        #NGA USER LOGIN
+        driver = self.driver
+        driver.get(self.base_url + "/users/sign_in")
+        driver.find_element_by_id("user_email").clear()
+        driver.find_element_by_id("user_email").send_keys("admin@scholastic.com")
+        driver.find_element_by_id("user_password").clear()
+        driver.find_element_by_id("user_password").send_keys("testtest")
+        driver.find_element_by_name("commit").click()
+        driver.get_screenshot_as_file("C:\Documents and Settings\qa.QA\Desktop\Screens\Homepage.png")
+    
+        #VERIFY HOMEPAGE ELEMENTS - Removed for Demo, makes it run very slow, like very slow
+        #try: self.assertTrue(self.is_element_present(By.CSS_SELECTOR, "img[alt=\"rSkills NGA\"]"))
+        #except AssertionError as e: self.verificationErrors.append(str(e))
+        #try: self.assertTrue(self.is_element_present(By.LINK_TEXT, "Home"))
+        #except AssertionError as e: self.verificationErrors.append(str(e))
+        #try: self.assertTrue(self.is_element_present(By.LINK_TEXT, "Assets"))
+        #except AssertionError as e: self.verificationErrors.append(str(e))
+        #try: self.assertTrue(self.is_element_present(By.LINK_TEXT, "Products"))
+        #except AssertionError as e: self.verificationErrors.append(str(e))
+        #try: self.assertTrue(self.is_element_present(By.LINK_TEXT, "Passages"))
+        #except AssertionError as e: self.verificationErrors.append(str(e))
+        #try: self.assertTrue(self.is_element_present(By.LINK_TEXT, "admin@scholastic.com"))
+        #except AssertionError as e: self.verificationErrors.append(str(e))
+        #try: self.assertTrue(self.is_element_present(By.LINK_TEXT, "Manage"))
+        #except AssertionError as e: self.verificationErrors.append(str(e))
+
+        #CREATE A PASSAGE
+        driver.find_element_by_link_text("Products").click()
+        driver.find_element_by_link_text("E3D").click()
+        driver.find_element_by_link_text("Passages").click()
+        driver.find_element_by_id("new-passage").click()
+        driver.find_element_by_id("passage_title").clear()
+        driver.find_element_by_id("passage_title").send_keys("PSTest")
+        driver.find_element_by_id("passage_name").clear()
+        driver.find_element_by_id("passage_name").send_keys("PSTest")
+        Select(driver.find_element_by_id("passage_genre")).select_by_visible_text("Fiction")
+        driver.switch_to_frame(driver.find_element_by_xpath("/html/body/div/div/form/fieldset/div[2]/div/div/div/iframe"))
+        driver.find_element_by_xpath("/html/body").click()  #driver.find_element_by_xpath("/html/body").click().send_keys results in a NONE Type error
+        driver.find_element_by_xpath("/html/body").send_keys("This is a Test")
+        driver.switch_to.default_content()
+        driver.find_element_by_id("submit-passage").click()
+        driver.get_screenshot_as_file("C:\Documents and Settings\qa.QA\Desktop\Screens\Passage.png")
+
+        #CREATE A NEW TEST OBJECT
+        driver.find_element_by_link_text("Products").click()
+        driver.find_element_by_link_text("E3D").click()
+        driver.find_element_by_id("new-test").click()
+        driver.find_element_by_id("assessment_name").clear()
+        driver.find_element_by_id("assessment_name").send_keys("PSTest")
+        Select(driver.find_element_by_id("assessment_trait_values_4")).select_by_visible_text("JRA")
+        Select(driver.find_element_by_id("assessment_trait_values_5")).select_by_visible_text("2")
+        driver.find_element_by_name("commit").click()
+        driver.get_screenshot_as_file("C:\Documents and Settings\qa.QA\Desktop\Screens\NewTest.png")
+
+        #CREATE TEST QUESTION
+        driver.find_element_by_xpath("/html/body/div/div/form/div[2]/div[2]/a").click()
+
+        #ACCESS QUESTION DETAILS
+        driver.switch_to_frame(driver.find_element_by_xpath("/html/body/div[1]/div/form/div[2]/fieldset[1]/div[2]/div/div/div/div/div/iframe"))
+        driver.find_element_by_xpath("/html/body").click()
+        driver.find_element_by_xpath("/html/body").send_keys("This is a test")
+        driver.switch_to.default_content()
+
+        #ADD QUESTION DETAILS
+        Select(driver.find_element_by_id("question_question_type_id")).select_by_visible_text("Selected Response, Multiple Answers")
+        Select(driver.find_element_by_id("question_question_type_id")).select_by_visible_text("Selected Response, Single Answer")
+        Select(driver.find_element_by_id("question_strand_id")).select_by_visible_text("E3D4")
+        Select(driver.find_element_by_id("question_status")).select_by_visible_text("Submitted By Writer")
+        driver.find_element_by_id("question_rating").clear()
+        driver.find_element_by_id("question_rating").send_keys("1")
+        driver.find_element_by_id("question_credits").clear()
+        driver.find_element_by_id("question_credits").send_keys("1 Credit")
+
+        #SELECT THE PRIMARY SKILLS
+        driver.find_element_by_id("primary_skills").click()
+        driver.find_element_by_id("skill200").click()
+        driver.find_element_by_css_selector("div.row > label.checkbox").click()
+        driver.find_element_by_id("close-the-modal").click()
+
+        #SELECT SECONDARY SKILL -- Currently not working
+        #driver.find_element_by_id("secondary_skills").click()
+        #driver.find_element_by_id("secondary_skills").click()
+        #driver.implicitly_wait(10)
+        #river.find_element_by_id("skill201").click()
+        #driver.find_element_by_xpath("//div[@id='skills_modal_skel']/div[3]/div[2]/label").click()
+        #driver.find_element_by_id("close-the-modal").click()
+
+        #ASSIGN A PASSAGE --Currently not working
+        #driver.find_element_by_id("open_passages_modal").click()
+        #driver.find_element_by_id("question_passage_ids_325").click()
+        #driver.find_element_by_css_selector("#linked_passages_modal_view > div.right > a.close-reveal-modal").click()
+        #driver.find_element_by_xpath("/html/body/div/div").click()
+        #driver.implicitly_wait(10)
+        ##At Line 106, the application stays greyed out and the rest of the events cannot be accessed
+
+        #CREATE AN ANSWER
+        driver.find_element_by_id("add_answer").click()
+        driver.switch_to_frame(driver.find_element_by_xpath("/html/body/div/div/form/div[2]/fieldset[3]/div[2]/div[2]/div/div[2]/div[1]/div/div/iframe"))
+        driver.find_element_by_xpath("/html/body").click()
+        driver.find_element_by_xpath("/html/body").send_keys("This is a test")
+        driver.switch_to.default_content()
+        driver.find_element_by_id("question_answers_attributes_0_correct").click()
+        driver.find_element_by_id("submit_question_and_return").click()
+
+        #SIGNOUT --Please note that python commands are CASE SENSITIVE
+        driver.find_element_by_xpath("/html/body/div/div/div[1]/ul/li[2]/a").click()  #had to reset this, some odd inconsistency
+        driver.find_element_by_link_text("Products").click()
+        driver.find_element_by_link_text("admin@scholastic.com").click()
+        driver.find_element_by_link_text("Sign Out").click()
+
+    def is_element_present(self, how, what):
+        try: self.driver.find_element(by=how, value=what)
+        except NoSuchElementException, e: return False
+        return True
+    
+    def is_alert_present(self):
+        try: self.driver.switch_to_alert()
+        except NoAlertPresentException, e: return False
+        return True
+    
+    def close_alert_and_get_its_text(self):
+        try:
+            alert = self.driver.switch_to_alert()
+            alert_text = alert.text
+            if self.accept_next_alert:
+                alert.accept()
+            else:
+                alert.dismiss()
+            return alert_text
+        finally: self.accept_next_alert = True
+
+if __name__ == "__main__":
+    unittest.main()
