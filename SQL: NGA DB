@@ -1,0 +1,232 @@
+#Data Validation of Tables.  Goal: Integrated into Stored Procedure or Automation Program, must be parameterized
+
+###Tie in all relational DB###
+###Must be run before and after###
+
+
+
+#################################################Product and Assessments ########################################################
+
+
+#1-Verify relation between Product and Assessment
+#2-Verify data entry
+#3-Clarification on: description, 
+	
+#COUNT
+SELECT count(*) from `assessment_content_editor`.`assessments` AS a
+join `assessment_content_editor`.`products` AS b
+on a.product_id = b.id
+and a.name = "Assess_QA"
+and a.published_at_version_id = 11  #most recent version
+and a.current = 1  #active?  How do I know this?
+and a.product_id = 5 #5 = e3d
+and a.preview_file_name = "pdf-sample.pdf"
+and a.preview_content_type = "application/pdf"
+and a.preview_file_size = 7945;
+
+#VALIDATION
+SELECT * from `assessment_content_editor`.`assessments` AS a
+join `assessment_content_editor`.`products` AS b
+on a.product_id = b.id
+and a.name = "Assess_QA"
+and a.published_at_version_id = 11  #most recent version
+and a.current = 1  #active?  How do I know this?
+and a.product_id = 5 #5 = e3d
+and a.preview_file_name = "pdf-sample.pdf"
+and a.preview_content_type = "application/pdf"
+and a.preview_file_size = 7945;
+
+
+
+######################################################Questions###########################################################
+
+#1-Prove relation between questions and assessment -- Not in this table
+#2-Prove Entered data is persisted
+#3-Clarification(s): format_id, question_excerpt, maximum_allowable responses, child_contingent_on_parent, item_id, lexile, excerpt_id
+
+SELECT * FROM `assessment_content_editor`.`questions` where credits = "QACredit"
+or question_text = "This is a qatest question"  #why using an "or" changes this?
+and question_type_id = 1
+and strand_id = 19  #e3d3
+and randomize_answers = 1
+and status = 1 #incomplete
+and rating = 1 
+and suppressed = 0; 
+
+
+
+SELECT COUNT(*) FROM `assessment_content_editor`.`questions` where credits = "QACredit"
+or question_text = "This is a qatest question"  #why using an "or" changes this?
+and question_type_id = 1
+and strand_id = 19  #e3d3
+and randomize_answers = 1
+and status = 1 #incomplete
+and rating = 1 
+and suppressed = 0; 
+
+
+####################################################Assessment and Questions#############################################
+
+#1-Links Assessments and Question
+
+#NOTES: Need the ID of the data first.  Kind of a "cascade" effect, where data feeds into the next data set
+#SELECT a.id from  `assessment_content_editor`.`assessments_questions` as a
+#where a.id = (select b.id from `assessment_content_editor`.`assessments_questions` as b
+#join `assessment_content_editor`.`questions` as c on b.question_id = c.id)
+#and
+#a.id = (select d.id from `assessment_content_editor`.`assessments_questions` as d
+#join `assessment_content_editor`.`assessments` as e
+#on d.assessment_id = e.id);
+
+
+#Validate
+
+Select * from assessment_content_editor.assessments_questions where
+question_id = 14122 and assessment_id = 391;
+
+
+#COUNT
+Select COUNT(*) from assessment_content_editor.assessments_questions where
+question_id = 14122 and assessment_id = 391;
+
+
+########################################################QUESTION-ANSWERS###############################################3
+
+#Objective(s):
+#1-Prove relation between questions and answers table perserved.  Answers MUST be tied to question, not vice versa
+#2-Prove entered data is persisted
+
+#Counts
+SELECT count(*) FROM `assessment_content_editor`.`answers` As a
+inner join `assessment_content_editor`.`questions` as b
+on a.question_id = b.id
+and answer_text like "%qa-ranswer1%"    #why does this respond better to the like and %
+AND correct = 1 LIMIT 20;
+
+    
+SELECT count(*) FROM `assessment_content_editor`.`answers` As a
+inner join `assessment_content_editor`.`questions` as b
+on a.question_id = b.id
+and answer_text like "%qa-wanswer1%"    #why does this respond better to the like and %
+AND correct = 0 LIMIT 20;
+    
+
+
+#Validate
+SELECT * FROM `assessment_content_editor`.`answers` As a
+inner join `assessment_content_editor`.`questions` as b
+on a.question_id = b.id
+and answer_text like "%qa-ranswer1%"    #why does this respond better to the like and %
+AND correct = 1 LIMIT 20;
+
+    
+SELECT * FROM `assessment_content_editor`.`answers` As a
+inner join `assessment_content_editor`.`questions` as b
+on a.question_id = b.id
+and answer_text like "%qa-wanswer1%"    #why does this respond better to the like and %
+AND correct = 0 LIMIT 20;
+
+
+#####################################################Question Trait Values###########################################
+
+#NOTE:  q_question_trait_values and question_trait_values do not seem to be used
+#Question trait value table is just a reference table and q_question_trait_values is not used 
+
+
+
+#####################################################Question Skills#################################################
+#Verify that the skill(s) belong to the correct question
+Select * from assessment_content_editor.questions_skills where question_id = 14122;
+Select COUNT(*) from assessment_content_editor.questions_skills where question_id = 14122;
+
+#####################################################Skills##########################################################
+#Verify the Skills in the product
+SELECT * FROM assessment_content_editor.skills where product_id =5;
+
+
+#######################################################Strands########################################################
+#Verify the Strands in the Product
+SELECT * FROM assessment_content_editor.strands where product_id=5;
+
+### 8-Trait_values###
+#Trait Values and Traits are both reference tables.  Assessments only use Issue and Number Traits
+
+SELECT * FROM assessment_content_editor.traits where product_id = 5; 
+
+
+################################################## BUCKET_ITEM_QUESTION - EMPTY#########################################
+SELECT * FROM assessment_content_editor.bucket_item_questions;
+
+################################################## BUCKETS - EMPTY #####################################################
+SELECT * FROM assessment_content_editor.buckets;
+
+################################################# CHILD QUESTIONS - TBD##################################################
+SELECT * FROM assessment_content_editor.child_questions;
+
+################################################# CHOICES - TBD ######################################################
+SELECT * FROM assessment_content_editor.choices;
+
+################################################# CKEDITOR_ASSETS - TBD ##################################################
+SELECT * FROM assessment_content_editor.ckeditor_assets;
+
+################################################### FORMATS### - N/A User does not add entries to this table #############
+SELECT * FROM assessment_content_editor.formats;
+
+################################################# PASSAGES ###############################################################
+SELECT * FROM assessment_content_editor.passages;
+
+#COUNT 
+SELECT COUNT(*) FROM `assessment_content_editor`.`passages` WHERE passage_text like "%qatext%"
+or  NAME like "%qaname%"
+or  title like "%qatitle%"
+and  genre like "%Fiction%";
+
+#CONTENT 
+SELECT * FROM `assessment_content_editor`.`passages` WHERE passage_text like "%qatext%"
+or  NAME like "%qaname%"
+or  title like "%qatitle%"
+and  genre like "%Fiction%";
+
+
+# Odd why AND would return 0, I would think OR statement would.  CHECK Data/Logic, might not be correct
+
+
+######################################## PASSAGEASSOCIATION #############################################################
+SELECT * FROM assessment_content_editor.passageassociations where passage_id = 420 and 
+question_id = 14122;
+
+
+######################################## PASSAGES_CHANGES TBD - Unknown structure########################################
+SELECT * FROM assessment_content_editor.passages_changes where passage_id = 420 and 
+question_id = 14122;
+
+
+############################################ ITEMS- EMPTY##################################################################
+
+
+#################################### PRODUCTS N/A - Unlikely user will modify this list############################
+SELECT * FROM assessment_content_editor.products;
+
+
+#################################### PROMPTS - TBD - Unknown structure###############################################
+SELECT * FROM assessment_content_editor.prompts;
+
+
+
+######################################QUESTION_TYPES### - Unlikely User will modify this list#########################
+#Is a reference table
+
+
+
+
+#######################################SCHEMA_MIGRATIONS - Likely does not need QA####################################
+#Is a reference table
+
+
+#######################################USERS -Likely Does not need QA #################################################
+#List of Users
+
+########################################VERSIONS -Likely Does not need QA##############################################
+#Is a reference table
+
+
