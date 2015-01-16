@@ -1,0 +1,63 @@
+*** Settings ***
+Documentation     A resource file with reusable keywords and variables for login/logout
+...
+...               The system specific keywords created here form our own
+...               domain specific language. They utilize keywords provided
+...               by the imported Selenium2Library.
+Library           Selenium2Library
+
+*** Variables ***
+${PRODUCT}        xpath=/html/body/div/div/div[1]/ul/li[2]/a
+${E3D}            xpath=/html/body/div/div/table/tbody/tr[3]/td[1]/a
+${PASSAGE}        xpath=/html/body/div/div/div[3]/section[2]/p/a
+${NEWPASSAGE}     xpath=/html/body/div/div/div[3]/section[2]/div/div[1]/a
+${TITLE}          xpath=/html/body/div/div/form/fieldset/div[1]/div[1]/input
+${PNAM}           xpath=/html/body/div/div/form/fieldset/div[1]/div[2]/input
+${GENRE}          xpath=/html/body/div/div/form/fieldset/div[1]/div[3]/select
+${TEXTFRAME}      xpath=/html/body/div/div/form/fieldset/div[2]/div/div/div/iframe
+${TEXTLINE}       xpath=/html/body
+${CREATE}         xpath=/html/body/div/div/form/fieldset/div[4]/input
+
+
+*** Keywords ***
+Open Product Page
+    Click Link    ${PRODUCT}
+
+Open E3D Product Link
+    Click Link    ${E3D}
+	
+Passage Tab
+    Click Link     ${PASSAGE}
+
+New Passage
+    Click Link     ${NEWPASSAGE}
+
+Input Title
+    Input Text    ${TITLE}     QAPSSGETITLE
+	
+Input Passage Name
+    Input Text    ${PNAM}      QAPSSGENAME
+	
+Genre Dropdown
+    Select From List    ${GENRE}     Fiction
+		
+Frame Select 
+    Select Frame    ${TEXTFRAME}      
+
+Enter Text 
+    Input Text     ${TEXTLINE}     QAPSSGETEXT
+
+Exit Frame
+	Unselect Frame
+	
+Create Passage
+     Click Button     ${CREATE}
+    
+    
+
+    
+
+
+
+	
+
