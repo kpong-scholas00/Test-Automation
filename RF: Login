@@ -1,0 +1,16 @@
+*** Settings ***
+Documentation     Test Suite for login 
+...
+Resource          rsc-login.txt
+
+*** Test Cases ***
+1-ValidLogin
+    Open Browser To Login Page
+    Input Username    admin@scholastic.com
+    Input Password    testtest
+    Submit Credentials
+    Welcome Page Should Be Open
+
+*** [Teardown]    Close Browser ***
+
+
