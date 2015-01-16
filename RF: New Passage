@@ -1,0 +1,24 @@
+*** Settings ***
+Documentation     Test Suite for New Object Creation 
+...
+Resource          rsc-Passage.txt
+
+*** Test Cases ***
+2-NewPassage
+
+    Open Product Page
+    Open E3D Product Link
+	Passage Tab
+    New Passage
+    Input Title
+    Input Passage Name
+    Genre Dropdown
+    Frame Select 
+	Enter Text 
+	Exit Frame
+    Create Passage
+
+
+*** [Teardown]    Close Browser ***
+
+
