@@ -1,0 +1,37 @@
+*** Settings ***
+Documentation     Test Suite for New Object Creation 
+...
+Resource          rsc-NewAsset.txt
+
+*** Test Cases ***
+3-NewAsset
+
+   Open Product Page
+   Open E3D Product Link
+   Open AssetTab 
+   Send File
+   Test Name
+   Remove Preview
+   Issue Dropdown
+   Number Dropdown
+   Create Test
+   Save Test
+   Create Question
+   Wait1
+   Frame Select 
+   Enter Text 	
+   Exit Frame
+   Wait2
+   Question Type Dropdown	
+   Question Strand Dropdown
+   Question Status Dropdown
+   Skill1	
+   Wait3
+   Select Skill
+   Close Skill 
+
+	
+
+*** [Teardown]    Close Browser ***
+
+
