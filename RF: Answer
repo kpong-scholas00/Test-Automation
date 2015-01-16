@@ -1,0 +1,25 @@
+*** Settings ***
+Documentation     Test Suite for New Object Creation 
+...
+Resource          rsc-answer.txt
+
+*** Test Cases ***
+4-Answer
+
+    Wait1
+    Add Answer
+	Select Answer Frame
+    Enter Answer1 Text
+    Exit Frame
+    Wait2
+    Correct Marker
+    Add another Answer
+	Select Answer Frame 2	
+    Enter Answer2 Text
+    Exit Frame 2
+    Save and Return
+
+	
+*** [Teardown]    Close Browser ***
+
+
